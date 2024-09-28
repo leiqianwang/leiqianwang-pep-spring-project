@@ -148,17 +148,20 @@ public class SocialMediaController {
           @PatchMapping("/messages/{messageId}")
           public ResponseEntity<Integer> updateMessageText(@PathVariable Integer messageId, 
                       @RequestBody Map<String, String> requestBody) {
-                        String updatedText = requestBody.get("messageUpdated"); //Change the KEY to match the new key in the JSON
+       String updatedText = requestBody.get("messageText");  // Match the key with the test case's JSON key "messageText"!!!
 
+              if (updatedText == null) {
+              // If the request body does not contain "messageUpdated", return BAD_REQUEST
+               return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+       }
+                    
                         try {
-                          int rowsUpdated = messageService.updateMessageById(messageId, updatedText);
-                          return new ResponseEntity<>(rowsUpdated, HttpStatus.OK);
-
-                        }catch (BadRequestException e) {
-                          return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                            int rowsUpdated = messageService.updateMessageById(messageId, updatedText);
+                            return new ResponseEntity<>(rowsUpdated, HttpStatus.OK);  // Return 200 OK if successful
+                        } catch (BadRequestException e) {
+                            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // Return 400 Bad Request if validation fails
                         }
-               
-            }
+                    }
           
 }
           
