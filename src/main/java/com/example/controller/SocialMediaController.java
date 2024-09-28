@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -89,4 +90,39 @@ public class SocialMediaController {
           List<Message> messages = messageService.getAllMessages();
           return new ResponseEntity<>(messages, HttpStatus.OK);
     }
- }
+
+    /**
+     * Retrieve message by its' messageId
+     * GET request to /messages/{messageId}
+     * API should be able to retrieve a message by messageId
+     * @param messageId
+     * @return
+     */
+
+    @SuppressWarnings("null")
+    @GetMapping("/messages/{messageId}")
+
+    public ResponseEntity<Message> getMessageById(@PathVariable Integer messageId) {
+        Optional<Message> message = messageService.getMessageById(messageId);
+        if (message.isPresent()) {
+           return new ResponseEntity<>(message.get(), HttpStatus.OK); // Return 200 OK with the message
+        }
+        return new ResponseEntity<>(null, HttpStatus.OK); //return 200 OK with no content if not found
+
+    }
+
+     @SuppressWarnings("null")
+    @DeleteMapping("/messages/{messageId}")
+     public ResponseEntity<Integer> deleteMessageById(@PathVariable Integer messageId) {
+            Integer rowsAffected = messageService.deleteMessageById(messageId);
+
+            if(rowsAffected == 1) {
+            return new ResponseEntity<>(rowsAffected, HttpStatus.OK);
+          }else {
+            return new ResponseEntity<>(null, HttpStatus.OK);
+          }
+        }
+}
+          
+    
+ 

@@ -8,13 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 
 public class MessageService {
 
-    private MessageRepository messageRepository;
-    private AccountRepository accountRepository;
+    private final MessageRepository messageRepository;
+    private final AccountRepository accountRepository;
+
+    // Constructor should inject repositories, not entities
+    @Autowired
+    public MessageService(MessageRepository messageRepository, AccountRepository accountRepository) {
+        this.messageRepository = messageRepository;
+        this.accountRepository = accountRepository;
+    }
 
     /**
      * ## 3: Our API should be able to process the creation of new messages.
@@ -29,7 +37,7 @@ including its messageId. The response status should be 200, which is the default
      * @return
      */
 
-    @Autowired
+    
     public Message createMessage(Message newMessage) {
         // Validate message text
         if (newMessage.getMessageText() == null || newMessage.getMessageText().trim().isEmpty()) {
@@ -51,4 +59,21 @@ including its messageId. The response status should be 200, which is the default
     public List<Message> getAllMessages() {
         return messageRepository.findAll();
     }
+
+    public Optional<Message> getMessageById(Integer messageId) {
+        return messageRepository.findById(messageId);
+    }
+
+    
+
+    public Integer deleteMessageById(Integer messageId) {
+          if(messageRepository.existsById(messageId)) {
+            // If the message exists, delete it
+            messageRepository.deleteById(messageId);
+            return 1;
+          }
+          return 0;   //No row affected if the message did not exist
+    }
+    
+    
 }
