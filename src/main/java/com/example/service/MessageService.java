@@ -64,6 +64,31 @@ including its messageId. The response status should be 200, which is the default
         return messageRepository.findById(messageId);
     }
 
+    //ENDPOINT PATCH request
+
+    public int updateMessageById(Integer messageId, String newMessageText) {
+        //Check if the message exists
+        Optional<Message> message = messageRepository.findById(messageId);
+        if(!message.isPresent()) {
+            throw new BadRequestException("Message not found.");
+        }
+
+        //check if the text is blank and the length validation
+        if(newMessageText == null || newMessageText.trim().isEmpty()) {
+            throw new BadRequestException("Message text cannot be blank.");
+        }
+        if(newMessageText.length() > 255) {
+            throw new BadRequestException("Message text cannot exceed 255 characters.");
+        }
+        //Update the message text if successful
+        Message messageUpdated = message.get();
+        messageUpdated.setMessageText(newMessageText);
+        messageRepository.save(messageUpdated);
+
+        return 1;   //the response body should contain the number of rows updated, and default 200.
+
+    }
+
     
 
     public Integer deleteMessageById(Integer messageId) {

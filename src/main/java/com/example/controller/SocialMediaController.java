@@ -9,8 +9,10 @@ import org.springframework.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -134,6 +136,30 @@ public class SocialMediaController {
             List<Message> messages = messageService.getMessagesByUserId(accountId);
             return new ResponseEntity<>(messages, HttpStatus.OK);
          }
+
+         /**
+          * PATCH to update the message text
+          Request Body: A JSON Object containing the new updated messageText
+          How to extract the messageText value from the request body? 
+          Map<T, T>???   Key:"messageUpdated"  Value: the updated text 
+          */
+
+          @SuppressWarnings("null")
+          @PatchMapping("/messages/{messageId}")
+          public ResponseEntity<Integer> updateMessageText(@PathVariable Integer messageId, 
+                      @RequestBody Map<String, String> requestBody) {
+                        String updatedText = requestBody.get("messageUpdated"); //Change the KEY to match the new key in the JSON
+
+                        try {
+                          int rowsUpdated = messageService.updateMessageById(messageId, updatedText);
+                          return new ResponseEntity<>(rowsUpdated, HttpStatus.OK);
+
+                        }catch (BadRequestException e) {
+                          return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                        }
+               
+            }
+          
 }
           
     
