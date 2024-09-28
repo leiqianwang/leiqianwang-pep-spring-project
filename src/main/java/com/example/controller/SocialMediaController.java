@@ -122,6 +122,18 @@ public class SocialMediaController {
             return new ResponseEntity<>(null, HttpStatus.OK);
           }
         }
+
+
+        /**
+         * GET endpoint to retrieve all messages by a particular user
+         * URL:   /accounts/{accountId}/messages
+         */
+
+         @GetMapping("/accounts/{accountId}/messages")
+         public ResponseEntity<List<Message>> getMessagesByUserId(@PathVariable Integer accountId) {
+            List<Message> messages = messageService.getMessagesByUserId(accountId);
+            return new ResponseEntity<>(messages, HttpStatus.OK);
+         }
 }
           
     

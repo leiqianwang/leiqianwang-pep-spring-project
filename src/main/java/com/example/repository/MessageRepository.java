@@ -14,5 +14,5 @@ public interface MessageRepository extends JpaRepository<Message, Integer> {
    //BY extending JpaRepository, Spring Data JPA automatically provides the implementation of findAll(), save(), findById()
    //and other CRUD methods
    
-   // List<Message> findAllByPostedBy(Integer accountId);
+    List<Message> findAllByPostedBy(Integer accountId);
 }

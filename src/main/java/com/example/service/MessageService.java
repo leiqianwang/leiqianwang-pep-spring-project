@@ -75,5 +75,16 @@ including its messageId. The response status should be 200, which is the default
           return 0;   //No row affected if the message did not exist
     }
     
+    /** 
+     * Retrives a;; messages posted by a particular user (accountId)
+     *   */
+
+     public List<Message> getMessagesByUserId(Integer accountId) {
+           if(!accountRepository.existsById(accountId)) {
+             return List.of();     //Return an empty list if the user is not found
+           }
+
+           return messageRepository.findAllByPostedBy(accountId);
+     }
     
 }
