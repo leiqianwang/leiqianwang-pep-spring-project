@@ -162,6 +162,32 @@ public class SocialMediaController {
                             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // Return 400 Bad Request if validation fails
                         }
                     }
+            
+
+                    
+
+            //Alternative simpler approach to directly extract value by passing a string in the @RequestBody
+                
+        //     public ResponseEntity<Integer> updateMessageText(
+        //         @PathVariable Integer messageId, @RequestBody String updatedText) {
+        
+        //     if (updatedText == null || updatedText.trim().isEmpty()) {
+        //         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // Return 400 if messageText is null or empty
+        //     }
+        
+        //     try {
+        //         int rowsUpdated = messageService.updateMessageById(messageId, updatedText);
+        
+        //         if (rowsUpdated == 1) {
+        //             return new ResponseEntity<>(rowsUpdated, HttpStatus.OK);  // Return 200 OK with rows updated
+        //         } else {
+        //             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // If something went wrong
+        //         }
+        
+        //     } catch (BadRequestException e) {
+        //         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // Return 400 for Bad Request if validation fails
+        //     }
+        // }
           
 }
           
