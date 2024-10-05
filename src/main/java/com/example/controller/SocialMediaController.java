@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.DTO.UpdateMessageRequest;
 import com.example.entity.*;
 import com.example.exception.BadRequestException;
 import com.example.service.AccountService;
@@ -144,50 +145,54 @@ public class SocialMediaController {
           Map<T, T>???   Key:"messageUpdated"  Value: the updated text 
           */
 
-          @SuppressWarnings("null")
-          @PatchMapping("/messages/{messageId}")
-          public ResponseEntity<Integer> updateMessageText(@PathVariable Integer messageId, 
-                      @RequestBody Map<String, String> requestBody) {
-       String updatedText = requestBody.get("messageText");  // Match the key with the test case's JSON key "messageText"!!!
+    //       @SuppressWarnings("null")
+    //       @PatchMapping("/messages/{messageId}")
+    //       public ResponseEntity<Integer> updateMessageText(@PathVariable Integer messageId, 
+    //                   @RequestBody Map<String, String> requestBody) {
+    //    String updatedText = requestBody.get("messageText");  // Match the key with the test case's JSON key "messageText"!!!
 
-              if (updatedText == null) {
-              // If the request body does not contain "messageUpdated", return BAD_REQUEST
-               return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-       }
+    //           if (updatedText == null) {
+    //           // If the request body does not contain "messageUpdated", return BAD_REQUEST
+    //            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    //    }
                     
-                        try {
-                            int rowsUpdated = messageService.updateMessageById(messageId, updatedText);
-                            return new ResponseEntity<>(rowsUpdated, HttpStatus.OK);  // Return 200 OK if successful
-                        } catch (BadRequestException e) {
-                            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // Return 400 Bad Request if validation fails
-                        }
-                    }
+    //                     try {
+    //                         int rowsUpdated = messageService.updateMessageById(messageId, updatedText);
+    //                         return new ResponseEntity<>(rowsUpdated, HttpStatus.OK);  // Return 200 OK if successful
+    //                     } catch (BadRequestException e) {
+    //                         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // Return 400 Bad Request if validation fails
+    //                     }
+    //                 }
             
 
                     
 
             //Alternative simpler approach to directly extract value by passing a string in the @RequestBody
                 
-        //     public ResponseEntity<Integer> updateMessageText(
-        //         @PathVariable Integer messageId, @RequestBody String updatedText) {
-        
-        //     if (updatedText == null || updatedText.trim().isEmpty()) {
-        //         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // Return 400 if messageText is null or empty
-        //     }
-        
-        //     try {
-        //         int rowsUpdated = messageService.updateMessageById(messageId, updatedText);
-        
-        //         if (rowsUpdated == 1) {
-        //             return new ResponseEntity<>(rowsUpdated, HttpStatus.OK);  // Return 200 OK with rows updated
-        //         } else {
-        //             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // If something went wrong
-        //         }
-        
-        //     } catch (BadRequestException e) {
-        //         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // Return 400 for Bad Request if validation fails
-        //     }
-        // }
+            @PatchMapping("/messages/{messageId}")
+            public ResponseEntity<Integer> updateMessageText(
+                    @PathVariable Integer messageId, @RequestBody UpdateMessageRequest updatedMessage) {
+
+                        String updatedText = updatedMessage.getMessageText();  // Extract the messageText from the DTO
+            
+                // Check if the messageText is provided and valid
+                if (updatedText == null || updatedText.trim().isEmpty()) {
+                    return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // Return 400 if text is invalid
+                }
+            
+                try {
+                    int rowsUpdated = messageService.updateMessageById(messageId, updatedText);
+            
+                    if (rowsUpdated == 1) {
+                        return new ResponseEntity<>(rowsUpdated, HttpStatus.OK);  // Return 200 OK if successful
+                    } else {
+                        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // Return 400 if update failed
+                    }
+            
+                } catch (BadRequestException e) {
+                    return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);  // Return 400 if validation fails
+                }
+            }
           
 }
           
